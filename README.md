@@ -36,10 +36,10 @@ Antes de começar, você precisará garantir que tenhas as seguintes ferramentas
 
 ```bash
 # Clone este reposotório com o comando
-$ git clone https://github.com/rafaelsgomes/leeo-backend-challange-nodejs.git
+$ git clone https://github.com/rafaelsgomes/leoo-back-end-challenge
 
 # Acesse o diretório do projeto
-$ cd leeo-backend-challange-nodejs
+$ cd leoo-back-end-challenge
 
 # Instale as dependências com o comando
 $ yarn
