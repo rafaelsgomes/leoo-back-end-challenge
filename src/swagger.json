@@ -1,0 +1,484 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de pedidos",
+        "description": "API que tem como objetivo o cadasto de usuários e pedidos.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333/",
+            "description": "API para cadastro de pedidos por usuário"
+        }
+    ],
+    "paths": {
+        "/users": {
+            "post": {
+                "summary": "Cadastro de um novo usuário",
+                "description": "Cadastra um novo usuário",
+                "tags": ["Users"],
+                "parameters": [],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/definitions/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "User",
+                                        "cpf": "12345678901",
+                                        "phone": "98765432109"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "500": {
+                        "description": "CPF already exists!"
+                    }
+                }
+            }
+            
+        },
+        "/users/list": {
+            "get": {
+                "summary": "Listagem de usuários",
+                "description": "Lista todos os usuários cadastrados",
+                "tags": ["Users"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "$ref": "#/definitions/User"
+                                },
+                                "examples": {
+                                    "users": {
+                                        "value": [{
+                                            "id": "a360ef69-213f-4540-b0bc-63546abab7de",
+                                            "name": "User",
+                                            "cpf": "12345678901",
+                                            "phone": "98765432109",
+                                            "created_at": "2022-02-03T17:25:08.082Z",
+                                            "updated_at": "2022-02-03T17:25:08.082Z"
+                                        },
+                                        {
+                                            "id": "a360ef69-213f-4540-b0bc-63546abab7de",
+                                            "name": "User 2",
+                                            "cpf": "12345678988",
+                                            "phone": "98765432199",
+                                            "created_at": "2022-02-03T17:25:08.082Z",
+                                            "updated_at": "2022-02-03T17:25:08.082Z"
+                                        }]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}":{
+            "put": {
+                "summary": "Atualiza um usuário",
+                "description": "Atualiza o telefone de um usuário",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description":"User id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/definitions/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "phone": "98765432109"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "$ref": "#/definitions/User"
+                                },
+                                "examples": {
+                                    "users": {
+                                        "value": {
+                                            "id": "a360ef69-213f-4540-b0bc-63546abab7de",
+                                            "name": "User",
+                                            "cpf": "12345678901",
+                                            "phone": "98765432109",
+                                            "created_at": "2022-02-03T17:25:08.082Z",
+                                            "updated_at": "2022-02-03T17:25:08.082Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User does not exists!"
+                    }
+                }
+                
+            }
+        },
+        "/users/delete/{id}": {
+            "delete": {
+                "summary": "Deleta um usuário",
+                "description": "Realiza a exlusão um usuário",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description":"User id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "User does not exists!"
+                    }
+                }
+            }
+            
+        },
+        "/orders/{user_id}": {
+            "post": {
+                "summary": "Cadastro de um novo pedido para o usuário",
+                "description": "Cadastra um novo pedido para o usuário informado.",
+                "tags": ["Orders"],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description":"User id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/definitions/Order"
+                            },
+                            "examples": {
+                                "order": {
+                                    "value": {
+                                        "item_description": "Item",
+                                        "item_quantity": 1,
+                                        "item_price": 15.00
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succes"
+                    },
+                    "404": {
+                        "description": "User does not exists!"  
+                    },
+                    "400": {
+                        "description": "The quantity and price must be at least 1 ! || The description must be filled!"  
+                    }
+                }
+            }
+            
+        },
+        "/orders/list": {
+            "get": {
+                "summary": "Listagem de pedidos",
+                "description": "Lista todos os pedidos cadastrados",
+                "tags": ["Orders"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "$ref": "#/definitions/Order"
+                                },
+                                "examples": {
+                                    "orders": {
+                                        "value": [{
+                                            "id": "97d2723d-f3e8-4429-9437-b7c8f41bc9c6",
+                                            "user_id": "730a72bf-29f1-45f7-8c9c-4fd7184aa88c",
+                                            "item_description": "Item",
+                                            "item_quantity": "1",
+                                            "item_price": "15",
+                                            "total_value": "15",
+                                            "created_at": "2022-02-03T23:58:00.400Z",
+                                            "updated_at": "2022-02-03T23:58:00.400Z"
+                                        },
+                                        {
+                                            "id": "97d2723d-f3e8-4429-9437-b7c8f41bc9c6",
+                                            "user_id": "730a72bf-29f1-45f7-8c9c-4fd7184aa88c",
+                                            "item_description": "Item 2",
+                                            "item_quantity": "5",
+                                            "item_price": "5",
+                                            "total_value": "25",
+                                            "created_at": "2022-02-03T23:58:00.400Z",
+                                            "updated_at": "2022-02-03T23:58:00.400Z"
+                                        }]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/user-orders/{user_id}": {
+            "get": {
+                "summary": "Listagem de pedidos",
+                "description": "Lista todos os pedidos cadastrados",
+                "tags": ["Orders"],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description":"User id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "$ref": "#/definitions/Order"
+                                },
+                                "examples": {
+                                    "orders": {
+                                        "value": [{
+                                            "id": "97d2723d-f3e8-4429-9437-b7c8f41bc9c6",
+                                            "user_id": "730a72bf-29f1-45f7-8c9c-4fd7184aa88c",
+                                            "item_description": "Item",
+                                            "item_quantity": "1",
+                                            "item_price": "15",
+                                            "total_value": "15",
+                                            "created_at": "2022-02-03T23:58:00.400Z",
+                                            "updated_at": "2022-02-03T23:58:00.400Z"
+                                        },
+                                        {
+                                            "id": "97d2723d-f3e8-4429-9437-b7c8f41bc9c6",
+                                            "user_id": "730a72bf-29f1-45f7-8c9c-4fd7184aa88c",
+                                            "item_description": "Item 2",
+                                            "item_quantity": "2",
+                                            "item_price": "20",
+                                            "total_value": "40",
+                                            "created_at": "2022-02-03T23:58:00.400Z",
+                                            "updated_at": "2022-02-03T23:58:00.400Z"
+                                        }]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User does not exists!"
+                    }
+                }
+            }
+        },
+        "/orders/{id}":{
+            "put": {
+                "summary": "Atualiza um pedido",
+                "description": "Atualiza o pedido de um usuário",
+                "tags": ["Orders"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description":"Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/definitions/Order"
+                            },
+                            "examples": {
+                                "order": {
+                                    "value": {
+                                        "item_description": "Item teste",
+                                        "item_quantity": "1",
+                                        "item_price": "20"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "$ref": "#/definitions/Order"
+                                },
+                                "examples": {
+                                    "users": {
+                                        "value": {
+                                            "id": "97d2723d-f3e8-4429-9437-b7c8f41bc9c6",
+                                            "user_id": "730a72bf-29f1-45f7-8c9c-4fd7184aa88c",
+                                            "item_description": "Item",
+                                            "item_quantity": "1",
+                                            "item_price": "15",
+                                            "total_value": "15",
+                                            "created_at": "2022-02-03T23:58:00.400Z",
+                                            "updated_at": "2022-02-03T23:58:00.400Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User does not exists!"  
+                    },
+                    "400": {
+                        "description": "The quantity and price must be at least 1 ! || The description must be filled!"  
+                    }
+                }
+                
+            }
+        },
+        "/orders/delete/{id}": {
+            "delete": {
+                "summary": "Deleta um pedido",
+                "description": "Realiza a exlusão um pedido",
+                "tags": ["Orders"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description":"Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Order does not exists!"
+                    }
+                }
+            }
+            
+        }
+    },
+    "definitions":{
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "cpf": {
+                    "type": "number"
+                },
+                "phone": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "date"
+                },
+                "updated_at": {
+                    "type": "date"
+                }
+            }
+        },
+        "Order": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "item_description": {
+                    "type": "string"
+                },
+                "item_quantity": {
+                    "type": "number"
+                },
+                "item_price": {
+                    "type": "number"
+                },
+                "total_value": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "date"
+                },
+                "updated_at": {
+                    "type": "date"
+                }
+            }
+        }
+    }
+}
